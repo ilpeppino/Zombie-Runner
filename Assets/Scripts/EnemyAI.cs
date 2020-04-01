@@ -12,6 +12,7 @@ public class EnemyAI : MonoBehaviour
     private float _distanceToTarget = Mathf.Infinity;
     private bool _isProvoked;
     private bool _isAttacking;
+    private Animator _animator;
 
 
     private void Awake()
@@ -19,6 +20,7 @@ public class EnemyAI : MonoBehaviour
         _enemyNav = GetComponent<NavMeshAgent>();
         _renderer = GetComponent<Renderer>();
         _renderer.material.color = Color.green;
+        _animator = GetComponent<Animator>();
         _isProvoked = false;
         _isAttacking = false;
     }
@@ -67,20 +69,20 @@ public class EnemyAI : MonoBehaviour
     private void ChaseTarget()
     {
         _enemyNav.SetDestination(_target.position);
-        _renderer.material.color = Color.red;
         _isProvoked = true;
+        _animator.SetTrigger("move");
     }
 
     private void AttackTarget()
     {
-        Debug.Log("Enely attacking player");
+        _animator.SetBool("attack", true);
     }
 
     private void StopMoving()
     {
         _isProvoked = false;
+        _animator.SetBool("attack", false);
         _isAttacking = false;
-        _renderer.material.color = Color.green;
     }
 
 }
