@@ -10,12 +10,22 @@ public class Weapon : MonoBehaviour
     [SerializeField] private int _damage = 30;
     [SerializeField] public GameObject _hitExplosionFX;
 
+
     private RaycastHit hit;
     private ParticleSystem _muzzleFlash;
+    private Vector3 originalPosition;
+    [SerializeField] private Vector3 liftOffset = new Vector3(-0.15f, 0.03f, -0.2f);
+    private Vector3 liftPosition;
+
+    private bool _isZoomCompleted = false;
+
 
     private void Awake()
     {
+
         _muzzleFlash = GetComponentInChildren<ParticleSystem>();
+        originalPosition = transform.localPosition;
+        liftPosition = originalPosition + liftOffset;
 
     }
 
@@ -25,6 +35,19 @@ public class Weapon : MonoBehaviour
         {
             Shoot();
         }
+
+        if (Input.GetButton("Fire2"))
+        {
+            if (!_isZoomCompleted)
+            {
+                LiftWeapon();               
+            }
+            
+        } else
+        {
+            _isZoomCompleted = false;
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, 0.3f);
+        }
     }
 
 
@@ -33,6 +56,20 @@ public class Weapon : MonoBehaviour
         PlayMuzzleFlash();
         ProcessRaycast();
 
+    }
+
+    private void LiftWeapon()
+    {
+        //transform.localPosition += liftOffset;
+        if (transform.localPosition != liftPosition)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, liftPosition, 0.3f);
+        }
+        else
+        {
+            _isZoomCompleted = true;
+        }
+        
     }
 
     private void PlayMuzzleFlash()
