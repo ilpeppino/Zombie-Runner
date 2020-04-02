@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour
 {
 
     [SerializeField] public int hitPoints = 100;
+    public bool isDead = false;
 
     public void TakeDamage(int damage)
     {
@@ -16,6 +17,7 @@ public class EnemyHealth : MonoBehaviour
         if (hitPoints <= 0)
         {
             Destroy(gameObject);
+            isDead = true;
         }
 
     }
